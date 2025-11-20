@@ -3,28 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FirstScanIt - Signature Visual QR Generator</title>
+    <title>FirstScanIt - Binary Matrix QR Generator</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
-            font-family: 'Segoe UI', system-ui, sans-serif;
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0a0a0a 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
-            color: #fff;
+            color: #00ff41;
         }
         
         .container {
-            background: rgba(255, 255, 255, 0.98);
-            border-radius: 30px;
+            background: rgba(0, 0, 0, 0.95);
+            border-radius: 20px;
             padding: 50px;
             max-width: 900px;
             width: 100%;
-            box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+            box-shadow: 0 0 50px rgba(0, 255, 65, 0.3), 0 30px 80px rgba(0,0,0,0.8);
+            border: 2px solid rgba(0, 255, 65, 0.2);
         }
         
         .header {
@@ -33,38 +34,41 @@
         }
         
         .header h1 {
-            color: #1a1a1a;
-            font-size: 2.8em;
-            font-weight: 800;
+            color: #00ff41;
+            font-size: 2.5em;
+            font-weight: 700;
             margin-bottom: 10px;
-            letter-spacing: -1px;
+            text-shadow: 0 0 20px rgba(0, 255, 65, 0.8);
+            letter-spacing: 2px;
         }
         
         .header .subtitle {
-            color: #666;
-            font-size: 1.2em;
+            color: #00cc33;
+            font-size: 1.1em;
             font-weight: 400;
+            text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
         }
         
         .brand-logo {
             text-align: center;
             margin: 30px 0;
             padding: 30px;
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            border-radius: 20px;
-            border: 3px solid #dee2e6;
+            background: rgba(0, 255, 65, 0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(0, 255, 65, 0.2);
         }
         
         .brand-logo img {
-            max-width: 180px;
-            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.2));
+            max-width: 150px;
+            filter: drop-shadow(0 0 20px rgba(0, 255, 65, 0.6));
         }
         
         .brand-logo p {
             margin-top: 15px;
-            color: #495057;
+            color: #00cc33;
             font-weight: 600;
-            font-size: 14px;
+            font-size: 13px;
+            text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
         }
         
         .input-section {
@@ -79,46 +83,54 @@
             display: block;
             margin-bottom: 10px;
             font-weight: 700;
-            color: #1a1a1a;
-            font-size: 15px;
+            color: #00ff41;
+            font-size: 14px;
+            text-shadow: 0 0 5px rgba(0, 255, 65, 0.5);
         }
         
         .input-group input {
             width: 100%;
             padding: 16px;
-            border: 3px solid #e0e0e0;
-            border-radius: 12px;
-            font-size: 16px;
+            border: 2px solid rgba(0, 255, 65, 0.3);
+            border-radius: 10px;
+            font-size: 15px;
             transition: all 0.3s;
-            background: #fafafa;
+            background: rgba(0, 0, 0, 0.6);
+            color: #00ff41;
+            font-family: 'Courier New', monospace;
         }
         
         .input-group input:focus {
             outline: none;
-            border-color: #1a1a1a;
-            background: white;
-            box-shadow: 0 0 0 4px rgba(26,26,26,0.1);
+            border-color: #00ff41;
+            background: rgba(0, 0, 0, 0.8);
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+        }
+        
+        .input-group input::placeholder {
+            color: rgba(0, 255, 65, 0.4);
         }
         
         .generate-btn {
             width: 100%;
-            padding: 20px;
-            background: linear-gradient(135deg, #1a1a1a 0%, #4a4a4a 100%);
-            color: white;
+            padding: 18px;
+            background: linear-gradient(135deg, #00ff41 0%, #00cc33 100%);
+            color: #000;
             border: none;
-            border-radius: 15px;
-            font-size: 19px;
+            border-radius: 12px;
+            font-size: 17px;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.3s;
             text-transform: uppercase;
             letter-spacing: 2px;
-            box-shadow: 0 10px 30px rgba(26,26,26,0.3);
+            box-shadow: 0 0 30px rgba(0, 255, 65, 0.5);
+            font-family: 'Courier New', monospace;
         }
         
         .generate-btn:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 15px 40px rgba(26,26,26,0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 0 40px rgba(0, 255, 65, 0.8);
         }
         
         .generate-btn:active {
@@ -126,7 +138,7 @@
         }
         
         .generate-btn:disabled {
-            opacity: 0.5;
+            opacity: 0.4;
             cursor: not-allowed;
         }
         
@@ -138,79 +150,84 @@
         
         #output.active {
             display: block;
-            animation: slideUp 0.6s ease;
+            animation: glitchIn 0.8s ease;
         }
         
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes glitchIn {
+            0%, 100% { opacity: 1; transform: translateY(0); }
+            50% { opacity: 0.8; transform: translateY(-5px) translateX(2px); }
         }
         
         #output h3 {
-            color: #1a1a1a;
-            font-size: 2em;
+            color: #00ff41;
+            font-size: 1.8em;
             margin-bottom: 30px;
             font-weight: 700;
+            text-shadow: 0 0 20px rgba(0, 255, 65, 0.8);
         }
         
         #canvas {
-            border: 6px solid #1a1a1a;
-            border-radius: 25px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            border: 4px solid #00ff41;
+            border-radius: 15px;
+            box-shadow: 0 0 40px rgba(0, 255, 65, 0.6), inset 0 0 20px rgba(0, 255, 65, 0.1);
             max-width: 100%;
-            background: white;
+            background: #000;
         }
         
         .download-btn {
             margin-top: 30px;
-            padding: 16px 40px;
-            background: #28a745;
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 17px;
+            padding: 14px 35px;
+            background: rgba(0, 255, 65, 0.2);
+            color: #00ff41;
+            border: 2px solid #00ff41;
+            border-radius: 10px;
+            font-size: 16px;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.3s;
-            box-shadow: 0 6px 20px rgba(40,167,69,0.3);
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+            font-family: 'Courier New', monospace;
         }
         
         .download-btn:hover {
-            background: #218838;
+            background: #00ff41;
+            color: #000;
             transform: scale(1.05);
         }
         
         .feature-badges {
             display: flex;
             justify-content: center;
-            gap: 15px;
+            gap: 12px;
             margin-top: 25px;
             flex-wrap: wrap;
         }
         
         .badge {
-            padding: 10px 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            padding: 8px 16px;
+            background: rgba(0, 255, 65, 0.1);
+            color: #00ff41;
+            border: 1px solid rgba(0, 255, 65, 0.3);
             border-radius: 50px;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 600;
-            box-shadow: 0 4px 15px rgba(102,126,234,0.3);
+            box-shadow: 0 0 10px rgba(0, 255, 65, 0.2);
         }
         
         .loading {
             margin-top: 25px;
-            color: #666;
-            font-size: 15px;
+            color: #00ff41;
+            font-size: 14px;
             font-weight: 600;
+            text-shadow: 0 0 10px rgba(0, 255, 65, 0.8);
         }
         
         .spinner {
             display: inline-block;
             width: 20px;
             height: 20px;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #1a1a1a;
+            border: 3px solid rgba(0, 255, 65, 0.3);
+            border-top: 3px solid #00ff41;
             border-radius: 50%;
             animation: spin 1s linear infinite;
             margin-right: 10px;
@@ -226,51 +243,51 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🎨 FirstScanIt Visual QR</h1>
-            <p class="subtitle">Production-Grade Artistic QR Code Generator</p>
+            <h1>⚡ FIRSTSCANIT MATRIX QR ⚡</h1>
+            <p class="subtitle">Binary-Enhanced Quantum Authentication</p>
         </div>
         
         <div class="brand-logo">
-            <img src="https://agi-prod-file-upload-public-main-use1.s3.amazonaws.com/55c2b418-840f-4204-82ca-e82db76e0a85" alt="FirstScanIt Logo">
-            <p>Your Signature Design • Traditional Turban Pattern</p>
+            <img src="https://agi-prod-file-upload-public-main-use1.s3.amazonaws.com/55c2b418-840f-4204-82ca-e82db76e0a85" alt="FirstScanIt">
+            <p>[ MATRIX CODE GENERATOR • BINARY SIGNATURE ]</p>
         </div>
         
         <div class="input-section">
             <div class="input-group">
-                <label for="urlInput">🔗 Product URL / Verification Link</label>
+                <label for="urlInput">▶ PRODUCT VERIFICATION URL</label>
                 <input type="text" id="urlInput" placeholder="https://verify.firstscanit.com/product/SKU123456" value="https://firstscanit.com/verify/FSI2025">
             </div>
             
-            <button class="generate-btn" onclick="generateVisualQR()" id="generateBtn">
-                ✨ GENERATE SIGNATURE QR CODE
+            <button class="generate-btn" onclick="generateBinaryQR()" id="generateBtn">
+                ⚡ GENERATE MATRIX QR CODE ⚡
             </button>
             
             <div id="loading" class="loading" style="display:none;">
-                <span class="spinner"></span>Crafting your artistic QR code...
+                <span class="spinner"></span>RENDERING BINARY MATRIX...
             </div>
         </div>
         
         <div id="output">
-            <h3>Your FirstScanIt Signature QR</h3>
+            <h3>[ BINARY SIGNATURE QR CODE ]</h3>
             <canvas id="canvas"></canvas>
             
             <div class="feature-badges">
-                <span class="badge">✓ 100% Scannable</span>
-                <span class="badge">✓ High Error Correction</span>
-                <span class="badge">✓ Production Ready</span>
-                <span class="badge">✓ Traditional Design</span>
+                <span class="badge">✓ BINARY ENCODED</span>
+                <span class="badge">✓ 100% SCANNABLE</span>
+                <span class="badge">✓ MATRIX STYLE</span>
+                <span class="badge">✓ PRODUCTION READY</span>
             </div>
             
-            <button class="download-btn" onclick="downloadQR()">📥 Download High-Res PNG (Print Ready)</button>
+            <button class="download-btn" onclick="downloadQR()">⬇ DOWNLOAD MATRIX QR</button>
         </div>
     </div>
 
     <script>
-        function generateVisualQR() {
+        function generateBinaryQR() {
             const url = document.getElementById('urlInput').value.trim();
             
             if (!url) {
-                alert('⚠️ Please enter a product URL or verification link');
+                alert('⚠️ ENTER VERIFICATION URL');
                 return;
             }
             
@@ -289,8 +306,8 @@
             try {
                 new QRCode(temp, {
                     text: url,
-                    width: 800,
-                    height: 800,
+                    width: 900,
+                    height: 900,
                     colorDark: "#000000",
                     colorLight: "#ffffff",
                     correctLevel: QRCode.CorrectLevel.H
@@ -299,32 +316,31 @@
                 setTimeout(() => {
                     const img = temp.querySelector('img');
                     if (img) {
-                        createSignatureQR(img);
+                        createBinaryMatrixQR(img);
                     } else {
-                        alert('❌ Error generating QR code');
+                        alert('❌ ERROR GENERATING QR');
                         resetUI();
                     }
                 }, 600);
                 
             } catch (error) {
-                alert('❌ Error: ' + error.message);
+                alert('❌ ERROR: ' + error.message);
                 resetUI();
             }
         }
         
-        function createSignatureQR(baseImg) {
+        function createBinaryMatrixQR(baseImg) {
             const canvas = document.getElementById('canvas');
             const ctx = canvas.getContext('2d');
             
-            canvas.width = 800;
-            canvas.height = 800;
+            canvas.width = 900;
+            canvas.height = 900;
             
             // Draw base QR
-            ctx.drawImage(baseImg, 0, 0, 800, 800);
+            ctx.drawImage(baseImg, 0, 0, 900, 900);
             
-            // Apply FirstScanIt signature styling
-            applyTurbanPattern(ctx, 800, 800);
-            addSubtleTexture(ctx, 800, 800);
+            // Apply binary matrix overlay
+            applyBinaryOverlay(ctx, 900, 900);
             
             // Show result
             document.getElementById('output').classList.add('active');
@@ -333,12 +349,19 @@
             document.getElementById('output').scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
         
-        function applyTurbanPattern(ctx, width, height) {
+        function applyBinaryOverlay(ctx, width, height) {
             const imageData = ctx.getImageData(0, 0, width, height);
             const data = imageData.data;
             
+            // Module size for binary text overlay
             const moduleSize = Math.floor(width / 100);
+            const fontSize = Math.max(6, moduleSize * 0.5);
             
+            ctx.font = `bold ${fontSize}px "Courier New", monospace`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            
+            // Overlay binary numbers on dark QR modules
             for (let y = 0; y < height; y += moduleSize) {
                 for (let x = 0; x < width; x += moduleSize) {
                     const centerX = x + moduleSize / 2;
@@ -348,71 +371,44 @@
                     const isDark = data[sampleIndex] < 128;
                     
                     if (isDark) {
-                        // Draw traditional turban-inspired decorative module
-                        drawTurbanModule(ctx, x, y, moduleSize);
+                        // Generate random binary digit (0 or 1)
+                        const binaryDigit = Math.random() > 0.5 ? '1' : '0';
+                        
+                        // Matrix green color with glow
+                        ctx.fillStyle = '#00ff41';
+                        ctx.shadowColor = '#00ff41';
+                        ctx.shadowBlur = 8;
+                        
+                        // Draw binary digit
+                        ctx.fillText(binaryDigit, centerX, centerY);
+                        
+                        // Reset shadow
+                        ctx.shadowBlur = 0;
                     }
                 }
             }
             
-            // Add subtle decorative dots in white spaces
-            for (let y = 0; y < height; y += 12) {
-                for (let x = 0; x < width; x += 12) {
+            // Add subtle matrix rain effect in background
+            addMatrixRain(ctx, width, height, data);
+        }
+        
+        function addMatrixRain(ctx, width, height, originalData) {
+            const fontSize = 8;
+            ctx.font = `${fontSize}px "Courier New", monospace`;
+            ctx.textAlign = 'center';
+            
+            // Add falling binary in white areas
+            for (let y = 0; y < height; y += 15) {
+                for (let x = 0; x < width; x += 15) {
                     const i = (y * width + x) * 4;
-                    if (data[i] > 200 && Math.random() > 0.75) {
-                        ctx.fillStyle = 'rgba(0, 0, 0, 0.12)';
-                        ctx.beginPath();
-                        ctx.arc(x, y, 1.5, 0, Math.PI * 2);
-                        ctx.fill();
+                    const isLight = originalData[i] > 200;
+                    
+                    if (isLight && Math.random() > 0.85) {
+                        const digit = Math.random() > 0.5 ? '1' : '0';
+                        ctx.fillStyle = 'rgba(0, 255, 65, 0.15)';
+                        ctx.fillText(digit, x, y);
                     }
                 }
-            }
-        }
-        
-        function drawTurbanModule(ctx, x, y, size) {
-            const centerX = x + size / 2;
-            const centerY = y + size / 2;
-            const radius = size * 0.42;
-            
-            // Main decorative circle
-            ctx.fillStyle = '#1a1a1a';
-            ctx.beginPath();
-            ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
-            ctx.fill();
-            
-            // Add traditional pattern details for larger modules
-            if (size > 6) {
-                // Inner ornamental ring
-                ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
-                ctx.lineWidth = 1;
-                ctx.beginPath();
-                ctx.arc(centerX, centerY, radius * 0.55, 0, Math.PI * 2);
-                ctx.stroke();
-                
-                // Decorative petals
-                const petals = 6;
-                for (let i = 0; i < petals; i++) {
-                    const angle = (Math.PI * 2 / petals) * i;
-                    const petalX = centerX + Math.cos(angle) * radius * 0.75;
-                    const petalY = centerY + Math.sin(angle) * radius * 0.75;
-                    
-                    ctx.fillStyle = 'rgba(255, 255, 255, 0.18)';
-                    ctx.beginPath();
-                    ctx.arc(petalX, petalY, radius * 0.15, 0, Math.PI * 2);
-                    ctx.fill();
-                }
-            }
-        }
-        
-        function addSubtleTexture(ctx, width, height) {
-            // Add very subtle diagonal lines (turban wrap texture)
-            ctx.strokeStyle = 'rgba(0, 0, 0, 0.02)';
-            ctx.lineWidth = 1;
-            
-            for (let i = -height; i < width + height; i += 25) {
-                ctx.beginPath();
-                ctx.moveTo(i, 0);
-                ctx.lineTo(i + height, height);
-                ctx.stroke();
             }
         }
         
@@ -425,7 +421,7 @@
             const canvas = document.getElementById('canvas');
             const link = document.createElement('a');
             const timestamp = new Date().toISOString().slice(0,10);
-            link.download = `FirstScanIt-QR-${timestamp}.png`;
+            link.download = `FirstScanIt-Matrix-QR-${timestamp}.png`;
             link.href = canvas.toDataURL('image/png');
             link.click();
         }
