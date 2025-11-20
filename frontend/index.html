@@ -266,9 +266,6 @@
     </div>
 
     <script>
-        // FirstScanIt Signature QR Generator
-        // Creates artistic QR codes with integrated turban pattern
-        
         function generateVisualQR() {
             const url = document.getElementById('urlInput').value.trim();
             
@@ -277,33 +274,28 @@
                 return;
             }
             
-            // Show loading state
             document.getElementById('loading').style.display = 'block';
             document.getElementById('output').classList.remove('active');
             document.getElementById('generateBtn').disabled = true;
             
-            // Clean up previous QR
             const tempDiv = document.getElementById('tempQR');
             if (tempDiv) tempDiv.remove();
             
-            // Create temp container for base QR
             const temp = document.createElement('div');
             temp.id = 'tempQR';
             temp.style.display = 'none';
             document.body.appendChild(temp);
             
             try {
-                // Generate high-quality base QR
                 new QRCode(temp, {
                     text: url,
                     width: 800,
                     height: 800,
                     colorDark: "#000000",
                     colorLight: "#ffffff",
-                    correctLevel: QRCode.CorrectLevel.H // 30% error tolerance for artistic elements
+                    correctLevel: QRCode.CorrectLevel.H
                 });
                 
-                // Wait for generation, then apply artistic styling
                 setTimeout(() => {
                     const img = temp.querySelector('img');
                     if (img) {
@@ -324,7 +316,6 @@
             const canvas = document.getElementById('canvas');
             const ctx = canvas.getContext('2d');
             
-            // High-resolution canvas for print quality
             canvas.width = 800;
             canvas.height = 800;
             
@@ -333,8 +324,7 @@
             
             // Apply FirstScanIt signature styling
             applyTurbanPattern(ctx, 800, 800);
-            addVisualElements(ctx, 800, 800);
-            addBrandingCorners(ctx, 800, 800);
+            addSubtleTexture(ctx, 800, 800);
             
             // Show result
             document.getElementById('output').classList.add('active');
@@ -347,7 +337,6 @@
             const imageData = ctx.getImageData(0, 0, width, height);
             const data = imageData.data;
             
-            // Transform dark QR modules into decorative traditional patterns
             const moduleSize = Math.floor(width / 100);
             
             for (let y = 0; y < height; y += moduleSize) {
@@ -361,22 +350,16 @@
                     if (isDark) {
                         // Draw traditional turban-inspired decorative module
                         drawTurbanModule(ctx, x, y, moduleSize);
-                    } else {
-                        // Add subtle texture to white areas
-                        if (Math.random() > 0.85) {
-                            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-                            ctx.fillRect(x, y, moduleSize, moduleSize);
-                        }
                     }
                 }
             }
             
-            // Add decorative dots in white spaces (like reference images)
+            // Add subtle decorative dots in white spaces
             for (let y = 0; y < height; y += 12) {
                 for (let x = 0; x < width; x += 12) {
                     const i = (y * width + x) * 4;
-                    if (data[i] > 200 && Math.random() > 0.7) {
-                        ctx.fillStyle = 'rgba(0, 0, 0, 0.15)';
+                    if (data[i] > 200 && Math.random() > 0.75) {
+                        ctx.fillStyle = 'rgba(0, 0, 0, 0.12)';
                         ctx.beginPath();
                         ctx.arc(x, y, 1.5, 0, Math.PI * 2);
                         ctx.fill();
@@ -388,31 +371,31 @@
         function drawTurbanModule(ctx, x, y, size) {
             const centerX = x + size / 2;
             const centerY = y + size / 2;
-            const radius = size * 0.4;
+            const radius = size * 0.42;
             
-            // Main decorative circle (turban bead)
+            // Main decorative circle
             ctx.fillStyle = '#1a1a1a';
             ctx.beginPath();
             ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
             ctx.fill();
             
-            // Add traditional pattern details
+            // Add traditional pattern details for larger modules
             if (size > 6) {
                 // Inner ornamental ring
-                ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
                 ctx.lineWidth = 1;
                 ctx.beginPath();
-                ctx.arc(centerX, centerY, radius * 0.6, 0, Math.PI * 2);
+                ctx.arc(centerX, centerY, radius * 0.55, 0, Math.PI * 2);
                 ctx.stroke();
                 
-                // Decorative accents (petals/rays)
+                // Decorative petals
                 const petals = 6;
                 for (let i = 0; i < petals; i++) {
                     const angle = (Math.PI * 2 / petals) * i;
-                    const petalX = centerX + Math.cos(angle) * radius * 0.8;
-                    const petalY = centerY + Math.sin(angle) * radius * 0.8;
+                    const petalX = centerX + Math.cos(angle) * radius * 0.75;
+                    const petalY = centerY + Math.sin(angle) * radius * 0.75;
                     
-                    ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.18)';
                     ctx.beginPath();
                     ctx.arc(petalX, petalY, radius * 0.15, 0, Math.PI * 2);
                     ctx.fill();
@@ -420,56 +403,17 @@
             }
         }
         
-        function addVisualElements(ctx, width, height) {
-            // Add subtle diagonal pattern overlay (turban wrap lines)
-            ctx.strokeStyle = 'rgba(0, 0, 0, 0.03)';
-            ctx.lineWidth = 2;
+        function addSubtleTexture(ctx, width, height) {
+            // Add very subtle diagonal lines (turban wrap texture)
+            ctx.strokeStyle = 'rgba(0, 0, 0, 0.02)';
+            ctx.lineWidth = 1;
             
-            for (let i = -height; i < width + height; i += 30) {
+            for (let i = -height; i < width + height; i += 25) {
                 ctx.beginPath();
                 ctx.moveTo(i, 0);
                 ctx.lineTo(i + height, height);
                 ctx.stroke();
             }
-        }
-        
-        function addBrandingCorners(ctx, width, height) {
-            // Add distinctive corner markers (inspired by references)
-            const markerSize = 80;
-            const innerSize = 40;
-            const positions = [
-                [30, 30],
-                [width - markerSize - 30, 30],
-                [30, height - markerSize - 30]
-            ];
-            
-            positions.forEach(([x, y]) => {
-                // Outer decorative frame
-                ctx.strokeStyle = '#d4af37'; // Gold accent
-                ctx.lineWidth = 6;
-                ctx.strokeRect(x, y, markerSize, markerSize);
-                
-                // Inner traditional square
-                const innerX = x + (markerSize - innerSize) / 2;
-                const innerY = y + (markerSize - innerSize) / 2;
-                ctx.fillStyle = '#1a1a1a';
-                ctx.fillRect(innerX, innerY, innerSize, innerSize);
-                
-                // Traditional ornamental dots
-                ctx.fillStyle = '#d4af37';
-                const dotPositions = [
-                    [x - 8, y - 8],
-                    [x + markerSize + 8, y - 8],
-                    [x - 8, y + markerSize + 8],
-                    [x + markerSize + 8, y + markerSize + 8]
-                ];
-                
-                dotPositions.forEach(([dx, dy]) => {
-                    ctx.beginPath();
-                    ctx.arc(dx, dy, 4, 0, Math.PI * 2);
-                    ctx.fill();
-                });
-            });
         }
         
         function resetUI() {
