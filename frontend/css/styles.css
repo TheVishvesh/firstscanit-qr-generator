@@ -1,0 +1,6 @@
+body { font-family: sans-serif; background: #fafaff; }
+.container { max-width: 500px; margin: 40px auto; background: #fff; padding: 30px; border-radius: 15px; box-shadow: 0 4px 24px #ddd; }
+form { display: flex; flex-direction: column; gap: 12px; }
+input, select, button { padding: 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 1em; }
+button { background: #4a148c; color: #fff; cursor: pointer; }
+button:hover { background: #764ba2; }
