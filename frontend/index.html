@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FirstScanIt - Traditional Artistic QR</title>
+    <title>FirstScanIt - Traditional QR Generator</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
@@ -39,29 +39,6 @@
             color: #666;
             margin-bottom: 40px;
             font-size: 1.1em;
-        }
-        
-        .reference {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-bottom: 30px;
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 15px;
-        }
-        
-        .reference img {
-            max-width: 120px;
-            border-radius: 10px;
-            border: 3px solid #ddd;
-        }
-        
-        .reference-text {
-            text-align: center;
-            color: #555;
-            font-size: 13px;
-            margin-top: 10px;
         }
         
         .input-group {
@@ -113,6 +90,11 @@
         
         .generate-btn:active {
             transform: translateY(0);
+        }
+        
+        .generate-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
         }
         
         #output {
@@ -174,30 +156,33 @@
             font-weight: 600;
             box-shadow: 0 4px 15px rgba(40,167,69,0.3);
         }
+        
+        .loading {
+            margin-top: 20px;
+            color: #666;
+            font-size: 14px;
+        }
     </style>
+    <!-- Use alternative reliable QR library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 <body>
     <div class="container">
         <h1>✨ FirstScanIt Traditional QR</h1>
         <p class="tagline">Create Beautiful, Scannable QR Codes with Traditional Patterns</p>
         
-        <div class="reference">
-            <div>
-                <img src="https://agi-prod-file-upload-public-main-use1.s3.amazonaws.com/7b5d9de1-8b7c-42bb-97d0-1cc2bf002505" alt="Reference QR">
-                <p class="reference-text">Inspired Design</p>
-            </div>
-            <div>
-                <img src="https://agi-prod-file-upload-public-main-use1.s3.amazonaws.com/861c8f9a-62db-4649-ad2f-1502619ddd65" alt="Traditional Pattern">
-                <p class="reference-text">Traditional Motifs</p>
-            </div>
-        </div>
-        
         <div class="input-group">
             <label for="urlInput">📍 Enter URL or Data</label>
             <input type="text" id="urlInput" placeholder="https://verify.firstscanit.com/product/ABC123" value="https://firstscanit.com">
         </div>
         
-        <button class="generate-btn" onclick="generateArtisticQR()">🎨 Generate Traditional QR Code</button>
+        <button class="generate-btn" onclick="generateArtisticQR()" id="generateBtn">
+            🎨 GENERATE TRADITIONAL QR CODE
+        </button>
+        
+        <div id="loading" class="loading" style="display:none; text-align:center;">
+            ⏳ Generating your QR code...
+        </div>
         
         <div id="output">
             <h3>Your Traditional QR Code</h3>
@@ -208,119 +193,116 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
     <script>
+        let qrInstance = null;
+        
         function generateArtisticQR() {
-            const url = document.getElementById('urlInput').value;
-            const canvas = document.getElementById('canvas');
+            const url = document.getElementById('urlInput').value.trim();
             
-            // Generate base QR with maximum error correction
-            QRCode.toCanvas(canvas, url, {
-                width: 700,
-                errorCorrectionLevel: 'H', // 30% damage tolerance
-                margin: 4,
-                color: {
-                    dark: '#0d47a1',  // Deep blue like reference
-                    light: '#ffffff'
-                }
-            }, function(error) {
-                if (error) {
-                    alert('Error: ' + error);
-                    return;
-                }
+            if (!url) {
+                alert('Please enter a URL or text');
+                return;
+            }
+            
+            // Show loading
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('output').classList.remove('active');
+            document.getElementById('generateBtn').disabled = true;
+            
+            // Clear previous QR
+            const tempDiv = document.getElementById('tempQR');
+            if (tempDiv) tempDiv.remove();
+            
+            // Create temporary container
+            const temp = document.createElement('div');
+            temp.id = 'tempQR';
+            temp.style.display = 'none';
+            document.body.appendChild(temp);
+            
+            // Generate QR
+            try {
+                new QRCode(temp, {
+                    text: url,
+                    width: 700,
+                    height: 700,
+                    colorDark: "#0d47a1",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.H
+                });
                 
-                // Apply artistic traditional styling
-                applyTraditionalArt(canvas);
+                // Wait for generation
+                setTimeout(() => {
+                    const img = temp.querySelector('img');
+                    if (img) {
+                        applyArtisticStyle(img);
+                    } else {
+                        alert('Error generating QR code');
+                        resetUI();
+                    }
+                }, 500);
                 
-                // Show result
-                document.getElementById('output').classList.add('active');
-                document.getElementById('output').scrollIntoView({ behavior: 'smooth', block: 'center' });
-            });
+            } catch (error) {
+                alert('Error: ' + error.message);
+                resetUI();
+            }
         }
         
-        function applyTraditionalArt(canvas) {
+        function applyArtisticStyle(img) {
+            const canvas = document.getElementById('canvas');
             const ctx = canvas.getContext('2d');
-            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            
+            canvas.width = 700;
+            canvas.height = 700;
+            
+            // Draw base QR
+            ctx.drawImage(img, 0, 0, 700, 700);
+            
+            // Apply artistic styling
+            const imageData = ctx.getImageData(0, 0, 700, 700);
             const data = imageData.data;
             
-            // First pass: Make dark modules rounded/decorative
-            const moduleSize = Math.floor(canvas.width / 50); // Approximate module size
-            
-            for (let y = 0; y < canvas.height; y += moduleSize) {
-                for (let x = 0; x < canvas.width; x += moduleSize) {
-                    const centerX = x + moduleSize / 2;
-                    const centerY = y + moduleSize / 2;
-                    
-                    // Check if this module is dark
-                    const sampleIndex = (Math.floor(centerY) * canvas.width + Math.floor(centerX)) * 4;
-                    const isDark = data[sampleIndex] < 128;
+            // Round corners and add decorative elements
+            for (let y = 0; y < 700; y += 10) {
+                for (let x = 0; x < 700; x += 10) {
+                    const i = (y * 700 + x) * 4;
+                    const isDark = data[i] < 128;
                     
                     if (isDark) {
-                        // Draw decorative shape instead of square
-                        drawDecorativeModule(ctx, x, y, moduleSize);
+                        // Draw rounded module
+                        ctx.fillStyle = '#0d47a1';
+                        ctx.beginPath();
+                        ctx.arc(x + 5, y + 5, 4.5, 0, Math.PI * 2);
+                        ctx.fill();
                     }
                 }
             }
             
-            // Second pass: Add subtle patterns to white areas
-            const patternData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            const pData = patternData.data;
-            
-            for (let y = 0; y < canvas.height; y++) {
-                for (let x = 0; x < canvas.width; x++) {
-                    const i = (y * canvas.width + x) * 4;
-                    const isLight = pData[i] > 200;
+            // Add decorative dots in white areas
+            for (let y = 0; y < 700; y += 15) {
+                for (let x = 0; x < 700; x += 15) {
+                    const i = (y * 700 + x) * 4;
+                    const isLight = data[i] > 200;
                     
-                    if (isLight && hasTraditionalDot(x, y)) {
-                        // Add tiny decorative dots like in reference image
-                        pData[i] = 100;      // R
-                        pData[i+1] = 150;    // G  
-                        pData[i+2] = 200;    // B (light blue dots)
-                        pData[i+3] = 255;    // A
+                    if (isLight && Math.random() > 0.5) {
+                        ctx.fillStyle = 'rgba(13, 71, 161, 0.15)';
+                        ctx.beginPath();
+                        ctx.arc(x, y, 1.5, 0, Math.PI * 2);
+                        ctx.fill();
                     }
                 }
             }
             
-            ctx.putImageData(patternData, 0, 0);
+            // Add corner markers
+            addCornerMarkers(ctx, 700, 700);
             
-            // Add corner markers (like orange squares in reference)
-            addCornerMarkers(ctx, canvas.width, canvas.height);
-        }
-        
-        function drawDecorativeModule(ctx, x, y, size) {
-            const centerX = x + size / 2;
-            const centerY = y + size / 2;
-            const radius = size * 0.45; // Slightly smaller than full square
-            
-            ctx.fillStyle = '#0d47a1'; // Match QR color
-            
-            // Draw rounded dot/circle instead of square (like reference QR)
-            ctx.beginPath();
-            ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
-            ctx.fill();
-            
-            // Add tiny decorative elements randomly (petals/patterns)
-            if (Math.random() > 0.7) {
-                ctx.fillStyle = '#1565c0'; // Lighter blue accent
-                ctx.beginPath();
-                ctx.arc(centerX + radius * 0.3, centerY - radius * 0.3, radius * 0.2, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
-        
-        function hasTraditionalDot(x, y) {
-            // Create pattern of tiny dots in white areas (like reference image)
-            const dotSpacing = 15;
-            const offset = 3;
-            
-            const xMod = (x + offset) % dotSpacing;
-            const yMod = (y + offset) % dotSpacing;
-            
-            return (xMod < 2 && yMod < 2);
+            // Show result
+            document.getElementById('output').classList.add('active');
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('generateBtn').disabled = false;
+            document.getElementById('output').scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
         
         function addCornerMarkers(ctx, width, height) {
-            // Add orange corner squares like in reference QR
             const markerSize = 60;
             const innerSize = 30;
             const positions = [
@@ -329,19 +311,22 @@
                 [20, height - markerSize - 20]
             ];
             
-            ctx.strokeStyle = '#ff9800'; // Orange
+            ctx.strokeStyle = '#ff9800';
             ctx.lineWidth = 8;
             
             positions.forEach(([x, y]) => {
-                // Outer square
                 ctx.strokeRect(x, y, markerSize, markerSize);
                 
-                // Inner square
                 const innerX = x + (markerSize - innerSize) / 2;
                 const innerY = y + (markerSize - innerSize) / 2;
                 ctx.fillStyle = '#263238';
                 ctx.fillRect(innerX, innerY, innerSize, innerSize);
             });
+        }
+        
+        function resetUI() {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('generateBtn').disabled = false;
         }
         
         function downloadQR() {
