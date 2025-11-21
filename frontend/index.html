@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FirstScanIt - Binary Matrix QR Generator</title>
+    <title>FirstScanIt - Binary Encoded QR Generator</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
@@ -47,6 +47,31 @@
             font-size: 1.1em;
             font-weight: 400;
             text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+        }
+        
+        .binary-info {
+            text-align: center;
+            margin: 25px 0;
+            padding: 20px;
+            background: rgba(0, 255, 65, 0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(0, 255, 65, 0.2);
+        }
+        
+        .binary-info .binary-text {
+            color: #00ff41;
+            font-size: 11px;
+            word-break: break-all;
+            line-height: 1.6;
+            margin-bottom: 10px;
+            text-shadow: 0 0 5px rgba(0, 255, 65, 0.5);
+        }
+        
+        .binary-info .decoded {
+            color: #00cc33;
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 10px;
         }
         
         .brand-logo {
@@ -243,13 +268,20 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>⚡ FIRSTSCANIT MATRIX QR ⚡</h1>
-            <p class="subtitle">Binary-Enhanced Quantum Authentication</p>
+            <h1>⚡ FIRSTSCANIT BINARY QR ⚡</h1>
+            <p class="subtitle">Encoded with "FirstScanIt" Binary Signature</p>
+        </div>
+        
+        <div class="binary-info">
+            <div class="binary-text">
+                01100110 01101001 01110010 01110011 01110100 01110011 01100011 01100001 01101110 01101001 01110100
+            </div>
+            <div class="decoded">↑ Binary encoding of "FirstScanIt" ↑</div>
         </div>
         
         <div class="brand-logo">
             <img src="https://agi-prod-file-upload-public-main-use1.s3.amazonaws.com/55c2b418-840f-4204-82ca-e82db76e0a85" alt="FirstScanIt">
-            <p>[ MATRIX CODE GENERATOR • BINARY SIGNATURE ]</p>
+            <p>[ QUANTUM BINARY SIGNATURE • PRODUCTION READY ]</p>
         </div>
         
         <div class="input-section">
@@ -259,30 +291,33 @@
             </div>
             
             <button class="generate-btn" onclick="generateBinaryQR()" id="generateBtn">
-                ⚡ GENERATE MATRIX QR CODE ⚡
+                ⚡ GENERATE FIRSTSCANIT QR ⚡
             </button>
             
             <div id="loading" class="loading" style="display:none;">
-                <span class="spinner"></span>RENDERING BINARY MATRIX...
+                <span class="spinner"></span>ENCODING BINARY SIGNATURE...
             </div>
         </div>
         
         <div id="output">
-            <h3>[ BINARY SIGNATURE QR CODE ]</h3>
+            <h3>[ FIRSTSCANIT BINARY QR CODE ]</h3>
             <canvas id="canvas"></canvas>
             
             <div class="feature-badges">
-                <span class="badge">✓ BINARY ENCODED</span>
+                <span class="badge">✓ "FIRSTSCANIT" ENCODED</span>
                 <span class="badge">✓ 100% SCANNABLE</span>
-                <span class="badge">✓ MATRIX STYLE</span>
+                <span class="badge">✓ UNIQUE SIGNATURE</span>
                 <span class="badge">✓ PRODUCTION READY</span>
             </div>
             
-            <button class="download-btn" onclick="downloadQR()">⬇ DOWNLOAD MATRIX QR</button>
+            <button class="download-btn" onclick="downloadQR()">⬇ DOWNLOAD BRANDED QR</button>
         </div>
     </div>
 
     <script>
+        // Binary encoding of "FirstScanIt" (your exact sequence)
+        const FIRSTSCANIT_BINARY = "01100110011010010111001001110011011101000111001101100011011000010110111001101001011101000";
+        
         function generateBinaryQR() {
             const url = document.getElementById('urlInput').value.trim();
             
@@ -306,8 +341,8 @@
             try {
                 new QRCode(temp, {
                     text: url,
-                    width: 900,
-                    height: 900,
+                    width: 1000,
+                    height: 1000,
                     colorDark: "#000000",
                     colorLight: "#ffffff",
                     correctLevel: QRCode.CorrectLevel.H
@@ -316,7 +351,7 @@
                 setTimeout(() => {
                     const img = temp.querySelector('img');
                     if (img) {
-                        createBinaryMatrixQR(img);
+                        createFirstScanItQR(img);
                     } else {
                         alert('❌ ERROR GENERATING QR');
                         resetUI();
@@ -329,18 +364,18 @@
             }
         }
         
-        function createBinaryMatrixQR(baseImg) {
+        function createFirstScanItQR(baseImg) {
             const canvas = document.getElementById('canvas');
             const ctx = canvas.getContext('2d');
             
-            canvas.width = 900;
-            canvas.height = 900;
+            canvas.width = 1000;
+            canvas.height = 1000;
             
             // Draw base QR
-            ctx.drawImage(baseImg, 0, 0, 900, 900);
+            ctx.drawImage(baseImg, 0, 0, 1000, 1000);
             
-            // Apply binary matrix overlay
-            applyBinaryOverlay(ctx, 900, 900);
+            // Apply FirstScanIt binary overlay
+            applyFirstScanItBinary(ctx, 1000, 1000);
             
             // Show result
             document.getElementById('output').classList.add('active');
@@ -349,19 +384,20 @@
             document.getElementById('output').scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
         
-        function applyBinaryOverlay(ctx, width, height) {
+        function applyFirstScanItBinary(ctx, width, height) {
             const imageData = ctx.getImageData(0, 0, width, height);
             const data = imageData.data;
             
-            // Module size for binary text overlay
             const moduleSize = Math.floor(width / 100);
-            const fontSize = Math.max(6, moduleSize * 0.5);
+            const fontSize = Math.max(7, moduleSize * 0.55);
             
             ctx.font = `bold ${fontSize}px "Courier New", monospace`;
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             
-            // Overlay binary numbers on dark QR modules
+            let binaryIndex = 0;
+            
+            // Overlay "FirstScanIt" binary sequence on dark QR modules
             for (let y = 0; y < height; y += moduleSize) {
                 for (let x = 0; x < width; x += moduleSize) {
                     const centerX = x + moduleSize / 2;
@@ -371,13 +407,14 @@
                     const isDark = data[sampleIndex] < 128;
                     
                     if (isDark) {
-                        // Generate random binary digit (0 or 1)
-                        const binaryDigit = Math.random() > 0.5 ? '1' : '0';
+                        // Get next binary digit from "FirstScanIt" sequence
+                        const binaryDigit = FIRSTSCANIT_BINARY[binaryIndex % FIRSTSCANIT_BINARY.length];
+                        binaryIndex++;
                         
-                        // Matrix green color with glow
+                        // Matrix green with glow
                         ctx.fillStyle = '#00ff41';
                         ctx.shadowColor = '#00ff41';
-                        ctx.shadowBlur = 8;
+                        ctx.shadowBlur = 10;
                         
                         // Draw binary digit
                         ctx.fillText(binaryDigit, centerX, centerY);
@@ -388,24 +425,28 @@
                 }
             }
             
-            // Add subtle matrix rain effect in background
-            addMatrixRain(ctx, width, height, data);
+            // Add subtle matrix effect in background
+            addBackgroundMatrix(ctx, width, height, data);
         }
         
-        function addMatrixRain(ctx, width, height, originalData) {
+        function addBackgroundMatrix(ctx, width, height, originalData) {
             const fontSize = 8;
             ctx.font = `${fontSize}px "Courier New", monospace`;
             ctx.textAlign = 'center';
             
-            // Add falling binary in white areas
-            for (let y = 0; y < height; y += 15) {
-                for (let x = 0; x < width; x += 15) {
+            let binaryIndex = 0;
+            
+            // Add faint "FirstScanIt" binary in white areas
+            for (let y = 0; y < height; y += 18) {
+                for (let x = 0; x < width; x += 18) {
                     const i = (y * width + x) * 4;
                     const isLight = originalData[i] > 200;
                     
                     if (isLight && Math.random() > 0.85) {
-                        const digit = Math.random() > 0.5 ? '1' : '0';
-                        ctx.fillStyle = 'rgba(0, 255, 65, 0.15)';
+                        const digit = FIRSTSCANIT_BINARY[binaryIndex % FIRSTSCANIT_BINARY.length];
+                        binaryIndex++;
+                        
+                        ctx.fillStyle = 'rgba(0, 255, 65, 0.12)';
                         ctx.fillText(digit, x, y);
                     }
                 }
@@ -421,7 +462,7 @@
             const canvas = document.getElementById('canvas');
             const link = document.createElement('a');
             const timestamp = new Date().toISOString().slice(0,10);
-            link.download = `FirstScanIt-Matrix-QR-${timestamp}.png`;
+            link.download = `FirstScanIt-Binary-QR-${timestamp}.png`;
             link.href = canvas.toDataURL('image/png');
             link.click();
         }
